@@ -51,6 +51,23 @@ class GraphQLTest extends TestCase
         $api->execute('bar', ['variable' => 'foo']);
     }
 
+    /**
+     * @test
+     */
+    public function shouldSupportOperationNameParameter()
+    {
+        $api = $this->getApiMock();
+
+        $api->expects($this->once())
+            ->method('post')
+            ->with('/graphql', $this->equalTo([
+                'query'=>'bar',
+                'operationName' => 'baz'
+            ]));
+
+        $api->execute('bar', [], 'application/vnd.github.v4+json', 'baz');
+    }
+
     protected function getApiClass()
     {
         return \Github\Api\GraphQL::class;

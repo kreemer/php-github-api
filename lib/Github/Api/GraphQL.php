@@ -19,10 +19,11 @@ class GraphQL extends AbstractApi
      * @param string $query
      * @param array  $variables
      * @param string $acceptHeaderValue
+     * @param ?string $operationName
      *
      * @return array
      */
-    public function execute($query, array $variables = [], string $acceptHeaderValue = 'application/vnd.github.v4+json')
+    public function execute($query, array $variables = [], string $acceptHeaderValue = 'application/vnd.github.v4+json', ?string $operationName = null)
     {
         $this->acceptHeaderValue = $acceptHeaderValue;
         $params = [
@@ -30,6 +31,9 @@ class GraphQL extends AbstractApi
         ];
         if (!empty($variables)) {
             $params['variables'] = json_encode($variables);
+        }
+        if (null !== $operationName) {
+            $params['operationName'] = $operationName;
         }
 
         return $this->post('/graphql', $params);
